@@ -7,7 +7,9 @@
 	"context": "..",
 
 	// Update the 'dockerFile' property if you aren't using the standard 'Dockerfile' filename.
-	"dockerFile": "../dockerfile"
+	"dockerFile": "../dockerfile",
+
+	"extensions": ["rust-lang.rust-analyzer"]
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
