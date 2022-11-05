@@ -20,14 +20,36 @@ fn main() {
 
     let some_int = 5; // some_int is copied because it is a known size. 
     makes_copy(some_int);
+
+    let s1 = String::from("Rust!");
+    let len = calculate_length(&s1);
+
+    println!("The length of '{}' is {}.", s1, len);
 }
 
 // string comes into scope and then drop is called at the end of the function freeing it from the heap
 fn takes_ownership(some_string: String){
     println!("{}", some_string);
-}
+} // drop is called
 
 // some_int comes into scope and nothings special happens after the the function returns.
 fn makes_copy(some_integer: i32){
     println!("{}", some_integer);
+} // northing special is done. some_integer just goes out of scope.
+
+fn gives_ownership() -> String {
+    let some_string = String::from("yours");
+    some_string
+}
+
+fn takes_and_gives_back(a_string: String) -> String {
+    a_string
+}
+
+// a reference is like a pointer in that it points to a memory address,
+// but a reference is guaranteed to point to a VALID value of a partiuclar
+// type for the life of that reference
+
+fn calculate_length(s: &String) -> usize {
+    s.len()
 }
