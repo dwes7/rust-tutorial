@@ -9,7 +9,7 @@
 	// Update the 'dockerFile' property if you aren't using the standard 'Dockerfile' filename.
 	"dockerFile": "../dockerfile",
 
-	"extensions": ["rust-lang.rust-analyzer"]
+	"extensions": ["rust-lang.rust-analyzer", "vadimcn.vscode-lldb"]
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
