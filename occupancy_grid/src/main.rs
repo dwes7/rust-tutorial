@@ -15,6 +15,7 @@ pub struct Idx {
 }
 
 // Direction of neighboring node.
+#[derive(Eq, PartialEq, Hash)]
 pub enum Direction{
     North = 0,
     NorthEast = 1,
@@ -22,21 +23,46 @@ pub enum Direction{
     SouthEast = 3,
     South = 4,
     SouthWest = 5,
-    West = 8,
-    NorthWest = 9,
+    West = 6,
+    NorthWest = 7,
 }
 
 // Hashmap to store a GridNodes neighbors. Should only have 9 entries
-type Neighbors = HashMap<Direction, GridNode>;
+type Neighbors = HashMap<Direction, Option<GridNode>>;
 
 // Data structure to hold all information regarding a node in the GridMap
 pub struct GridNode {
     pub state : NodeState,
-    pub index : Idx,
-    pub creation_time : i64,
+    pub index : Option<Idx>,
+    pub creation_time : u128,
     pub neighbors : Neighbors,
+    pub index_set : bool,
+    pub neighbors_set : bool,
 }
 
+impl Default for GridNode {
+    fn default() -> Self {
+        let neighbor_map = Neighbors::from([
+            (Direction::North, None),
+            (Direction::NorthEast, None),
+            (Direction::East, None),
+            (Direction::SouthEast, None),
+            (Direction::South, None),
+            (Direction::SouthWest, None),
+            (Direction::West, None),
+            (Direction::NorthWest, None),
+        ]);
+        
+        GridNode {
+            state: NodeState::Unknown(-1),
+            index: None,
+            creation_time : SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_millis(),
+            neighbors : neighbor_map,
+            index_set : false,
+            neighbors_set : false,
+        }
+    }
+}
 
 // Occupancy grid data structure
 // TODO change NodeState to GridNode
@@ -52,12 +78,13 @@ impl OccupancyGrid {
     pub fn new(_width : usize, _height:usize, _res : f64) -> Self{
         let capacity = _width*_height;
         let mut _data : Vec<NodeState> = Vec::with_capacity(capacity as usize);
-        for i in 0..capacity{
+        for _ in 0..capacity{
             let node = NodeState::Unknown(-1);
             _data.push(node);
         }
         OccupancyGrid { data: _data, width: _width, height: _height, resulotion : _res }
     }
+
 
     pub fn add_obstacles(&mut self, indecies : &Vec<usize>){
         for idx in indecies{
@@ -65,9 +92,7 @@ impl OccupancyGrid {
         }
     }
 
-
-    
-
+    // Example grid map indicies.
     //   j
     // i 0  1  2  3  4
     //   5  6  7  8  9 
